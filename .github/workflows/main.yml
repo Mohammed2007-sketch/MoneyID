@@ -38,7 +38,7 @@ jobs:
           sed -i 's/🆔 //g' pubspec.yaml
           sed -i '/islamic-bank.jpg/d' pubspec.yaml
           flutter create --project-name moneyid_app . --platforms android
-          sed -i 's/1.7.1/1.9.24/g' android/settings.gradle
+          sed -i 's/1.7.10/1.9.24/g' android/settings.gradle
 
       - name: Install Dependencies
         run: flutter pub get
