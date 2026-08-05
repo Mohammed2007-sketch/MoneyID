@@ -70,10 +70,8 @@ jobs:
       - name: Configure Official App Icon & Name
         run: |
           sed -i 's/android:label="[^"]*"/android:label="MoneyID 🆔"/g' android/app/src/main/AndroidManifest.xml || true
+          sed -i '/dev_dependencies:/a \  flutter_launcher_icons: ^0.13.1' pubspec.yaml
           cat << 'EOF' >> pubspec.yaml
-
-          dev_dependencies:
-            flutter_launcher_icons: ^0.13.1
 
           flutter_launcher_icons:
             android: "ic_launcher"
