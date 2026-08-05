@@ -75,8 +75,9 @@ jobs:
           distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-all.zip
           EOF
 
-      - name: Configure Official App Icon & Name
+      - name: Configure Official App Icon & Name & Fix Manifest
         run: |
+          sed -i 's/package="com.moneyid.app"//g' android/app/src/main/AndroidManifest.xml || true
           sed -i 's/android:label="[^"]*"/android:label="MoneyID 🆔"/g' android/app/src/main/AndroidManifest.xml || true
           sed -i '/dev_dependencies:/a \  flutter_launcher_icons: ^0.13.1' pubspec.yaml
           cat << 'EOF' >> pubspec.yaml
@@ -94,7 +95,7 @@ jobs:
           flutter pub run flutter_launcher_icons || true
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
