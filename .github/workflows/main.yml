@@ -28,14 +28,64 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Generate Android & Fix Kotlin
+      - name: Generate Android Scaffold
         run: |
           flutter create --project-name moneyid_app . --platforms android
-          sed -i -E 's/org\.jetbrains\.kotlin\.android" version "[^"]*"/org.jetbrains.kotlin.android" version "1.9.24"/g' android/settings.gradle || true
-          sed -i -E 's/ext\.kotlin_version = .*/ext.kotlin_version = "1.9.24"/g' android/build.gradle || true
 
-      - name: Install Dependencies
-        run: flutter pub get
+      - name: Force Kotlin 1.9.24 in settings.gradle
+        run: |
+          cat << 'EOF' > android/settings.gradle
+          pluginManagement {
+              def flutterSdkPath = {
+                  def properties = new Properties()
+                  def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
+                  if (localPropertiesFile.exists()) {
+                      localPropertiesFile.withReader("UTF-8") { reader ->
+                          properties.load(reader)
+                      }
+                  }
+                  def sdkPath = properties.getProperty("flutter.sdk")
+                  assert sdkPath != null : "flutter.sdk not set in local.properties"
+                  return sdkPath
+              }()
+
+              includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+              repositories {
+                  google()
+                  mavenCentral()
+                  gradlePluginPortal()
+              }
+          }
+
+          plugins {
+              id "dev.flutter.flutter-plugin-loader" version "1.0.0"
+              id "com.android.application" version "7.3.0" apply false
+              id "org.jetbrains.kotlin.android" version "1.9.24" apply false
+          }
+
+          include ":app"
+          EOF
+
+      - name: Configure Official App Icon & Name
+        run: |
+          sed -i 's/android:label="[^"]*"/android:label="MoneyID 🆔"/g' android/app/src/main/AndroidManifest.xml || true
+          cat << 'EOF' >> pubspec.yaml
+
+          dev_dependencies:
+            flutter_launcher_icons: ^0.13.1
+
+          flutter_launcher_icons:
+            android: "ic_launcher"
+            ios: true
+            image_path: "assets/logos/moneyid-logo.jpg"
+            min_sdk_android: 21
+          EOF
+
+      - name: Install Dependencies & Generate Icons
+        run: |
+          flutter pub get
+          flutter pub run flutter_launcher_icons || true
 
       - name: Build APK
         run: flutter build apk --release
