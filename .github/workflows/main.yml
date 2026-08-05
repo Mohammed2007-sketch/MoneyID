@@ -32,6 +32,11 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
+      - name: Fix and Generate Android
+        run: |
+          sed -i 's/flutter_services: null//g' pubspec.yaml
+          flutter create . --platforms android
+
       - name: Install Dependencies
         run: flutter pub get
 
