@@ -12,10 +12,6 @@ jobs:
     name: Build Android APK
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./moneyid-flutter-app
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,13 +28,9 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Fix and Generate Android
+      - name: Generate Android
         run: |
-          sed -i 's/flutter_services: null//g' pubspec.yaml
-          sed -i 's/🆔 //g' pubspec.yaml
-          sed -i '/islamic-bank.jpg/d' pubspec.yaml
           flutter create --project-name moneyid_app . --platforms android
-          sed -i 's/1.7.10/1.9.24/g' android/settings.gradle
 
       - name: Install Dependencies
         run: flutter pub get
@@ -50,4 +42,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: MoneyID-APK
-          path: moneyid-flutter-app/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
