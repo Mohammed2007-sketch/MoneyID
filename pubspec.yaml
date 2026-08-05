@@ -1,0 +1,49 @@
+name: moneyid_app
+description: MoneyID  - Ultra-lightweight, offline-first digital payment orchestrator for Palestine.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  sqflite: ^2.3.2
+  path_provider: ^2.1.2
+  path: ^1.9.0
+  encrypt: ^5.0.3
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^3.5.5
+  url_launcher: ^6.2.5
+  flutter_contacts: ^1.1.7
+  
+  # State management & Local Storage
+  shared_preferences: ^2.2.3
+  
+  # Biometrics
+  local_auth: ^2.2.0
+  
+  # Permissions
+  permission_handler: ^11.3.1
+  
+  # Analytics & PDF
+  fl_chart: ^0.68.0
+  pdf: ^3.11.0
+  printing: ^5.11.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/logos/moneyid-logo.jpg
+    - assets/logos/bank-of-palestine.jpg
+    - assets/logos/PalPay.jpg
+    - assets/logos/JawwalPay.jpg
