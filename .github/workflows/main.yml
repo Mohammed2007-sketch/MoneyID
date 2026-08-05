@@ -32,7 +32,7 @@ jobs:
         run: |
           flutter create --project-name moneyid_app . --platforms android
 
-      - name: Force Kotlin 1.9.24 in both build.gradle and settings.gradle
+      - name: Upgrade AGP 8.2.1, Kotlin 1.9.24 & Gradle 8.4
         run: |
           cat << 'EOF' > android/settings.gradle
           pluginManagement {
@@ -60,45 +60,14 @@ jobs:
 
           plugins {
               id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-              id "com.android.application" version "7.3.1" apply false
+              id "com.android.application" version "8.2.1" apply false
               id "org.jetbrains.kotlin.android" version "1.9.24" apply false
           }
 
           include ":app"
           EOF
 
-          cat << 'EOF' > android/build.gradle
-          buildscript {
-              ext.kotlin_version = '1.9.24'
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:7.3.1'
-                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-              }
-          }
-
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-
-          rootProject.buildDir = '../build'
-          subprojects {
-              project.buildDir = "${rootProject.buildDir}/${project.name}"
-          }
-          subprojects {
-              project.evaluationDependsOn(':app')
-          }
-
-          tasks.register("clean", Delete) {
-              delete rootProject.buildDir
-          }
-          EOF
+          sed -i 's/gradle-.*-bin.zip/gradle-8.4-bin.zip/g' android/gradle/wrapper/gradle-wrapper.properties || true
 
       - name: Configure Official App Icon & Name
         run: |
