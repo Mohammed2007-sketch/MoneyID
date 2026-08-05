@@ -31,8 +31,8 @@ jobs:
       - name: Generate Android & Fix Kotlin
         run: |
           flutter create --project-name moneyid_app . --platforms android
-          sed -i 's/1.7.10/1.9.24/g' android/settings.gradle
-          sed -i 's/1.8.22/1.9.24/g' android/settings.gradle || true
+          sed -i -E 's/org\.jetbrains\.kotlin\.android" version "[^"]*"/org.jetbrains.kotlin.android" version "1.9.24"/g' android/settings.gradle || true
+          sed -i -E 's/ext\.kotlin_version = .*/ext.kotlin_version = "1.9.24"/g' android/build.gradle || true
 
       - name: Install Dependencies
         run: flutter pub get
