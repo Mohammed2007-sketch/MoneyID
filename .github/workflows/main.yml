@@ -35,6 +35,7 @@ jobs:
       - name: Fix and Generate Android
         run: |
           sed -i 's/flutter_services: null//g' pubspec.yaml
+          sed -i 's/🆔 //g' pubspec.yaml
           flutter create . --platforms android
 
       - name: Install Dependencies
