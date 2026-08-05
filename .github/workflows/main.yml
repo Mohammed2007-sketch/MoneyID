@@ -32,7 +32,7 @@ jobs:
         run: |
           flutter create --project-name moneyid_app . --platforms android
 
-      - name: Upgrade AGP 8.2.1, Kotlin 1.9.24 & Gradle 8.4
+      - name: Upgrade AGP 8.2.1, Kotlin 1.9.24 & Gradle 8.2
         run: |
           cat << 'EOF' > android/settings.gradle
           pluginManagement {
@@ -67,7 +67,13 @@ jobs:
           include ":app"
           EOF
 
-          sed -i 's/gradle-.*-bin.zip/gradle-8.4-bin.zip/g' android/gradle/wrapper/gradle-wrapper.properties || true
+          cat << 'EOF' > android/gradle/wrapper/gradle-wrapper.properties
+          distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists
+          distributionUrl=https\://services.gradle.org/distributions/gradle-8.2-all.zip
+          EOF
 
       - name: Configure Official App Icon & Name
         run: |
