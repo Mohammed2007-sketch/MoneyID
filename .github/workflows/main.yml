@@ -36,7 +36,7 @@ jobs:
         run: |
           sed -i 's/flutter_services: null//g' pubspec.yaml
           sed -i 's/🆔 //g' pubspec.yaml
-          flutter create . --platforms android
+          flutter create --project-name moneyid_app . --platforms android
 
       - name: Install Dependencies
         run: flutter pub get
